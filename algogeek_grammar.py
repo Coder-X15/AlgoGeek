@@ -2,11 +2,14 @@
 
 class Group:
     def __init__(self, group_name):
+        '''class to handle command or operator groups/types'''
         self.name = group_name
         self.commands = []
     def __contains__(self, x):
+        '''Group.__contains__(x) <=> x in Group'''
         return x in self.commands
     def add(self, command):
+        '''adds commands to the group if commands'''
         self.commands.append(command)
 
         
@@ -18,7 +21,7 @@ def tokenise(sentence, groups):
     add = False
     for part in parts:
         for group in groups:
-            if part in group:
+            if part.lower() in group:
                 types.append((part, group.name))
                 break
         else:
@@ -35,8 +38,6 @@ def tokenise(sentence, groups):
                 
             elif part.isdigit() or (False not in [u.isdigit() for u in part.split('.')]):
                 types.append((int(part), 'number'))
-            elif part in ['+','-','/','*','//','%','>','<','>=','<=','==','!=','=','+=','-=','*=','/=','//=','%=']:
-                types.append((part, 'operator'))
             elif ',' in part:
                 sub = part.split(',')
                 for item in sub:
@@ -46,15 +47,17 @@ def tokenise(sentence, groups):
                 
     return types
 
-input_cmds = Group('input_command')
-output_cmds = Group('output_command')
-assignment_cmds = Group('assignment_command')
-for cmd in 'print display output'.split():
-    output_cmds.add(cmd)
-
-for cmd in 'input read get'.split():
-    input_cmds.add(cmd)
-for cmd in 'set assign let'.split():
-    assignment_cmds.add(cmd)
-cmd_groups = [input_cmds, output_cmds, assignment_cmds]
-                
+class Grammar_Rule:
+    def __init__(self, structure_type):
+        '''basic class to denote a rule in the compiler's grammar'''
+        self.structures = []
+        self.type = structure_type
+    def add(self, rule):
+        '''updates self.structure'''
+        self.structures.append(rule.split())
+    def validate(self, token_list):
+        '''validates if the sentence structure is correct from the list of tokens extracted from the sentence'''
+        if [token[1] for token in token_list]  in self.structures:
+            return True
+        else:
+            return False
