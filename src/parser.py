@@ -28,5 +28,41 @@
 #  6. Goto stataments
 #    S -> goto int
 
-# Step 1: Create a class to represent the grammar rules for each kind
-# Strategy - we start off with a single class that represents the whole grammar
+# Step 1: Create functions to validate each basic token
+
+def isStart(token: tuple) -> bool:
+    ''' validates the start token'''
+    return token[0] == 'start'
+
+def isStop(token: tuple) -> bool:
+    ''' validates the stop token '''
+    return token[0] == 'stop'
+
+# Step 2: Construct mechanism to parse expressions
+# This will involve creating the postfix order of the expression tokens, and then evaluating their order
+
+# Step 3: Implement the parser functions for the rest of the rules
+
+def isExpression(token_stream: list) -> bool:
+    ''' validates the expression token stream '''
+    return True # yet to implement the logic of
+
+def isGoto(token_stream: list) -> bool:
+    ''' validates the goto token stream '''
+    return len(token_stream) == 2 and (token_stream[0][0] == 'goto' and token_stream[1][0] == 'int')
+
+def isConditional(token_stream: list) -> bool:
+    ''' validates the token stream for conditional statements'''
+    def If(token: tuple) -> bool:
+        return token[0] == 'if'
+    def Then(token: tuple) -> bool:
+        return token[0] == 'then'
+    def Else(token: tuple) -> bool:
+        return token[0] == 'else'
+    
+    pattern = [
+        If, isExpression, Then, isGoto, Else, isGoto
+    ]
+
+
+
